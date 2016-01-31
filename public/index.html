@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Cadastrados | angularJS</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+        <script>
+        	angular.module('Usuarios', [])
+        	.factory('UsuariosService', function($http) {
+
+        		var host = "http://localhost:3000";
+
+        		var _getUsuarios = function() {
+        			return $http.get(host + "/usuarios");
+        		};
+        		var _getUsuario = function(id) {
+        			return $http.get(host + "/usuarios/" + id);
+        		}
+
+        		return {
+        			getUsuarios: _getUsuarios,
+        			getUsuario: _getUsuario 
+        		}
+        	})
+        	.controller('UsuariosCtrl', function($scope, UsuariosService) {
+
+        		$scope.usuarios = [];
+
+    			UsuariosService.getUsuarios().success(function(data) {
+    				$scope.usuarios = data;
+    			}).error(function(data, status) {
+    				console.log("erro " + data);
+    			});
+
+        	});
+        	
+        </script>
+    </head>
+    <body ng-app="Usuarios">
+    	<div class="container" ng-controller="UsuariosCtrl">
+    		<div class="jumbotron">
+				<h2>Cadastrados</h2>
+				<div class="table-responsive">
+					<table class="table table-striped table-hover">
+						<tr>
+							<th></th>
+							<th class="text-center">ID</th>
+							<th>Nome</th>
+							<th>Sobrenome</th>
+							<th class="text-center">Idade</th>
+							<th class="text-center">Email</th>
+						</tr>
+						<tr ng-repeat="u in usuarios">
+							<td class="text-center">
+								<a href="#"> edit </a>
+							</td>
+							<td> {{ u._id }} </td>
+							<td> {{ u.nome.nome }} </td>
+							<td> {{ u.nome.sobrenome }} </td>
+							<td class="text-center"> {{ u.idade }} </td>
+							<td> {{ u.email }} </td>
+						</tr>
+					</table>
+				</div>
+    		</div>
+    	</div>
+    </body>
+</html>
