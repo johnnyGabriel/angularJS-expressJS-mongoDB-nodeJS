@@ -74,5 +74,6 @@ app.get('/produtos', function(req, res) {
 	}]);
 });
 
-app.listen(3000);
-console.log('Running...');
+app.listen(3000, function() {
+	console.log("Server running...");
+});
